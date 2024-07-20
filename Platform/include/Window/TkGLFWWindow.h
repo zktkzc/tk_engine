@@ -19,6 +19,8 @@ namespace tk {
 
         void SwapBuffer() override;
 
+        [[nodiscard]] GLFWwindow *GetWindowHandler() const {return mGLFWWindow;}
+
     private:
         GLFWwindow *mGLFWWindow;
     };

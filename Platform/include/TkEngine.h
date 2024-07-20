@@ -18,9 +18,13 @@
 #include <set>
 #include <unordered_set>
 
+#define ARRAY_SIZE(r) (sizeof(r) / sizeof(r[0]))
+
 #ifdef TK_ENGINE_PLATFORM_WIN32
 #define VK_USE_PLATFORM_WIN32_KHR
+
 #include <Windows.h>
+
 #elif TK_ENGINE_PLATFORM_MACOS
 #define VK_USE_PLATFORM_MACOS_MVK
 #elif TK_ENGINE_PLATFORM_LINUX
