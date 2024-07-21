@@ -5,22 +5,9 @@
 #include "Graphic/TkVKCommon.h"
 
 namespace tk {
-    const DeviceFuture requestedLayers[] = {
-            {"VK_LAYER_KHRONOS_validation", true},
-    };
-
-    const DeviceFuture requestedExtensions[] = {
-            {VK_KHR_SURFACE_EXTENSION_NAME, true},
-            {VK_EXT_DEBUG_REPORT_EXTENSION_NAME, false},
-#ifdef TK_ENGINE_PLATFORM_WIN32
-            {VK_KHR_WIN32_SURFACE_EXTENSION_NAME, true},
-#endif
-#ifdef TK_ENGINE_PLATFORM_MACOS
-            {VK_MVK_MACOS_SURFACE_EXTENSION_NAME, true},
-#endif
-#ifdef TK_ENGINE_PLATFORM_LINUX
-            {VK_KHR_XCB_SURFACE_EXTENSION_NAME, true},
-#endif
+    struct QueueFamilyInfo {
+        int32_t queueFamilyIndex = -1;
+        uint32_t queueCount = 0;
     };
 
     class TkVKGraphicContext : public TkGraphicContext {
@@ -29,15 +16,40 @@ namespace tk {
 
         ~TkVKGraphicContext() override;
 
+        [[nodiscard]] VkInstance GetInstance() const { return mInstance; }
+
+        [[nodiscard]] VkSurfaceKHR GetSurface() const { return mSurface; }
+
+        [[nodiscard]] VkPhysicalDevice GetPhysicalDevice() const { return mPhyDevice; }
+
+        [[nodiscard]] const QueueFamilyInfo &GetGraphicQueueFamilyInfo() const { return mGraphicQueueFamily; }
+
+        [[nodiscard]] const QueueFamilyInfo &GetPresentQueueFamilyInfo() const { return mPresentQueueFamily; }
+
+        [[nodiscard]] VkPhysicalDeviceMemoryProperties GetPhysicalDeviceMemoryProperties() const { return mPhyDeviceMemoryProperties; }
+
+        [[nodiscard]] bool IsSameQueueFamily() const { return mGraphicQueueFamily.queueFamilyIndex == mPresentQueueFamily.queueFamilyIndex; }
+
     private:
         void CreateInstance();
 
         void CreateSurface(TkWindow *window);
 
+        void SelectPhyDevice();
+
+        static void PrintPhyDeviceInfo(const VkPhysicalDeviceProperties &props);
+
+        static uint32_t GetPhyDeviceScore(const VkPhysicalDeviceProperties &props);
+
     private:
+        bool bShouldValidate = true;
         VkInstance mInstance = nullptr;
         VkSurfaceKHR mSurface = nullptr;
-        bool bShouldValidate = true;
+
+        VkPhysicalDevice mPhyDevice = nullptr;
+        QueueFamilyInfo mGraphicQueueFamily{};
+        QueueFamilyInfo mPresentQueueFamily{};
+        VkPhysicalDeviceMemoryProperties mPhyDeviceMemoryProperties{};
     };
 }
 

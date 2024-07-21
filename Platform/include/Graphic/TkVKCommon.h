@@ -9,7 +9,7 @@ struct DeviceFuture {
     bool required;
 };
 
-#define CALL_VK(func) check_vk_result(func, __FILE_NAME__, __LINE__, #func)
+#define CALL_VK(func) check_vk_result(func, __FILENAME__, __LINE__, #func)
 
 /**
  * @brief 检查设备是否支持所需的扩展和层
@@ -31,7 +31,7 @@ static bool checkDeviceFutures(const char *label, bool bExtension, uint32_t avai
         bool bFound = false;
         const char *result = requestFutures[i].required ? "(required, not found)" : "(not found)";
         for (int j = 0; j < availableCount; j++) {
-            const char *availableName = bExtension? ((VkExtensionProperties *) available)[j].extensionName : ((VkLayerProperties *) available)[j].layerName;
+            const char *availableName = bExtension ? ((VkExtensionProperties *) available)[j].extensionName : ((VkLayerProperties *) available)[j].layerName;
             if (strcmp(availableName, requestFutures[i].name) == 0) {
                 outEnableFutures[(*outEnableCount)++] = availableName;
                 bFound = true;
@@ -108,11 +108,11 @@ vk_result_string(VkResult code) {
 #endif
 #if defined(VK_ENABLE_BETA_EXTENSIONS) && defined(VK_KHR_video_queue)
             ENUM_TO_STR(VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR);
-        ENUM_TO_STR(VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR);
-        ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR);
-        ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR);
-        ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR);
-        ENUM_TO_STR(VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR);
+            ENUM_TO_STR(VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR);
+            ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR);
+            ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR);
+            ENUM_TO_STR(VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR);
+            ENUM_TO_STR(VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR);
 #endif
 #ifdef VK_EXT_image_drm_format_modifier
         ENUM_TO_STR(VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT);
